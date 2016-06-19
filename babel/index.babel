@@ -1,0 +1,57 @@
+class App extends React.Component{
+  render(){
+    return(
+      <div className="container">
+        <TextEditor />
+        <h1 id="title"><span>Markdown Previewer</span></h1>
+        <h6 id="credit"><span>-Swoozeki</span></h6>
+      </div>
+    );
+  }
+}
+
+class TextEditor extends React.Component{
+  constructor(){
+    super();
+    this.state={
+      text: ""
+    };
+  }
+
+  update(event){
+    this.setState({
+      text: event.target.value
+    });
+  }
+
+  render(){
+    return(
+      <div className="row">
+        <div className="col-md-6" >
+          <textarea id="text-box" value={this.state.text} onChange={this.update.bind(this)} resizable="false"></textarea>
+        </div>
+        <div className="col-md-6" >
+          <Preview text={this.state.text}/>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Preview extends React.Component{
+  createMarkup(text){
+    return{
+      __html: marked(text,{sanitize:true})
+    };
+  }
+  render(){
+    return(
+      <div id="preview-box">
+        <span dangerouslySetInnerHTML={this.createMarkup(this.props.text)} />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />,document.getElementById("content"));
+
